@@ -91,7 +91,7 @@ void sendSocket(char hello[],int PORT,char* IP)
         return;
     }
     send(sock , hello , strlen(hello) , 0 );
-    printf("[C Client] \"%s\"\n",hello);
+    printf("[C CLIENT] \"%s\"\n",hello);
     close(sock);
 }
 
