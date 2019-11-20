@@ -11,6 +11,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class JsonParser {
+    public static String WriteStart(){
+        JSONObject jo = new JSONObject();
+        jo.put("Evento", "start");
+        return jo.toString();
+    }
     public static void WriteJsonTest()
     {
         // creating JSONObject

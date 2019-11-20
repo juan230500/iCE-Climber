@@ -47,8 +47,8 @@ public class Sockets {
         /*for (int i=0;i<10;i++) {
             sendSocket("Mensaje "+i, 8090, "127.0.0.1");
         }*/
-        for (int i=0;i<10;i++) {
-            listenSocket( 8090);
+        for (int i=0;i<1;i++) {
+            sendSocket( "fsdf",80,"1");
         }
     }
 }
