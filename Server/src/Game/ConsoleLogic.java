@@ -5,7 +5,7 @@ import Net.Sockets;
 import java.util.Scanner;
 
 public class ConsoleLogic {
-    private boolean GameRunning=false;
+
     private GameAdmin Admin;
 
     ConsoleLogic(GameAdmin Admin){
@@ -13,12 +13,12 @@ public class ConsoleLogic {
     }
 
     private String startCase(){
-        GameRunning=true;
+        this.Admin.setGameRunning(true);
         Admin.startPlayers();
         return "Inicio exitoso";
     }
     private String endCase(){
-        GameRunning=false;
+        this.Admin.setGameRunning(false);
         return "Cierre exitoso";
     }
     private String createCase(){
@@ -32,17 +32,17 @@ public class ConsoleLogic {
                 this.Admin.showPlayers();
                 return "";
             case "start":
-                if (GameRunning)
+                if (this.Admin.isGameRunning())
                     return "Ya hay otro juego corriendo";
                 else
                     return startCase();
             case "end":
-                if (GameRunning)
+                if (this.Admin.isGameRunning())
                     return endCase();
                 else
                     return "No hay ningún juego que cerrar";
             case "create":
-                if (GameRunning)
+                if (this.Admin.isGameRunning())
                     return createCase();
                 else
                     return "No hay ningún juego donde crear";
@@ -55,6 +55,8 @@ public class ConsoleLogic {
     public static void main(String[] args){
         GameAdmin Game1=new GameAdmin();
         ConsoleLogic Console1=new ConsoleLogic(Game1);
+        EventListener EL1=new EventListener(Game1);
+        EL1.start();
         Game1.add(8081,"127.0.0.1",1);
         Game1.add(8081,"127.0.0.1",2);
         Game1.add(8081,"127.0.0.1",2);

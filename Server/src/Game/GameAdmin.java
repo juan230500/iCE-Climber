@@ -3,14 +3,22 @@ package Game;
 import Net.JsonParser;
 import Net.Sockets;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameAdmin {
     private Player[] Players;
     private int observers;
+    private boolean GameRunning;
+
+    public boolean isGameRunning() {
+        return GameRunning;
+    }
+
+    public void setGameRunning(boolean gameRunning) {
+        GameRunning = gameRunning;
+    }
 
     GameAdmin(){
+        this.GameRunning=false;
         this.observers=0;
         this.Players=new Player[4];
     }

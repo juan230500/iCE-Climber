@@ -16,6 +16,12 @@ public class JsonParser {
         jo.put("Evento", "start");
         return jo.toString();
     }
+    public static String WriteVal(boolean val){
+        JSONObject jo = new JSONObject();
+        jo.put("Evento", "login");
+        jo.put("Respuesta", val);
+        return jo.toString();
+    }
     public static void WriteJsonTest()
     {
         // creating JSONObject
@@ -59,6 +65,7 @@ public class JsonParser {
         System.out.println(jo.toJSONString());
 
     }
+
     public static void ParseJsonTest() throws Exception{
         // parsing file "JSONExample.json"
         Object obj = new JSONParser().parse("{\"firstName\":\"John\",\"lastName\":\"Smith\",\"address\":{\"streetAddress\":\"21 2nd Street\",\"city\":\"New York\",\"state\":\"NY\",\"postalCode\":10021},\"age\":25,\"phoneNumbers\":[{\"type\":\"home\",\"number\":\"212 555-1234\"},{\"type\":\"fax\",\"number\":\"212 555-1234\"}]}");
@@ -104,7 +111,8 @@ public class JsonParser {
     }
 
     public static void main(String[] args) throws Exception {
-        WriteJsonTest();
-        ParseJsonTest();
+        Object obj = new JSONParser().parse("{\"ID\":1, \"IP\":\"127.0.0.1\", \"Puerto\":8080}");
+        /*WriteJsonTest();
+        ParseJsonTest();*/
     }
 }
