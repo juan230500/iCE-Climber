@@ -1,6 +1,6 @@
 package Game;
 
-import Net.Sockets;
+import Net.JsonParser;
 
 import java.util.Scanner;
 
@@ -13,15 +13,36 @@ public class ConsoleLogic {
     }
 
     private String startCase(){
+        if (!this.Admin.isReady())
+            return "No hay suficientes jugadores";
         this.Admin.setGameRunning(true);
-        Admin.startPlayers();
+        Admin.sendAll(JsonParser.WriteStart());
         return "Inicio exitoso";
     }
     private String endCase(){
         this.Admin.setGameRunning(false);
         return "Cierre exitoso";
     }
-    private String createCase(){
+    private String createCase(String[] words){
+        if (words.length!=4)
+            return "Cantidad de parámetros incorrecta";
+        if (
+                !words[1].equals("foca") &&
+                !words[1].equals("ave") &&
+                !words[1].equals("hielo") &&
+                !words[1].equals("naranja") &&
+                !words[1].equals("banano") &&
+                !words[1].equals("berenjena") &&
+                !words[1].equals("lechuga")
+        )
+            return "Obstáculo no válido";
+        int level=Integer.parseInt(words[2]);
+        if (level<1 || level>10)
+            return "Nivel fuera de rango";
+        int location=Integer.parseInt(words[3]);
+        if (location<0 || location >100)
+            return "Localización fuera de rango";
+        Admin.sendAll(JsonParser.WriteEnemy(words[1],level,location,Admin.getIDe()));
         return "Generación exitosa";
     }
 
@@ -43,7 +64,7 @@ public class ConsoleLogic {
                     return "No hay ningún juego que cerrar";
             case "create":
                 if (this.Admin.isGameRunning())
-                    return createCase();
+                    return createCase(words);
                 else
                     return "No hay ningún juego donde crear";
             default:
@@ -62,9 +83,9 @@ public class ConsoleLogic {
         Game1.add(8081,"127.0.0.1",2);
         while (true){
             Scanner scan = new Scanner(System.in);
-            String input = scan.next();
+            String input = scan.nextLine();
             if (input.equals("exit")) return;
-            System.out.println(Console1.mainCase(input));
+            System.out.printf("[CONSOLE] %s\n",Console1.mainCase(input));
         }
 
     }

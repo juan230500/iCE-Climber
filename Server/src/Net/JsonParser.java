@@ -4,8 +4,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,6 +20,16 @@ public class JsonParser {
         jo.put("Respuesta", val);
         return jo.toString();
     }
+    public static String WriteEnemy(String name,int level,int location,int IDe){
+        JSONObject jo = new JSONObject();
+        jo.put("Evento", "enemy");
+        jo.put("Nombre", name);
+        jo.put("Nivel", level);
+        jo.put("Localizacion", location);
+        jo.put("IDe", IDe);
+        return jo.toString();
+    }
+
     public static void WriteJsonTest()
     {
         // creating JSONObject

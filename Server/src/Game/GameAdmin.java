@@ -1,13 +1,15 @@
 package Game;
 
-import Net.JsonParser;
 import Net.Sockets;
+
 
 
 public class GameAdmin {
     private Player[] Players;
     private int observers;
     private boolean GameRunning;
+    private int topLevel;
+    private int LastEnemy;
 
     public boolean isGameRunning() {
         return GameRunning;
@@ -18,12 +20,16 @@ public class GameAdmin {
     }
 
     GameAdmin(){
+        this.LastEnemy=0;
+        this.topLevel=1;
         this.GameRunning=false;
         this.observers=0;
         this.Players=new Player[4];
     }
 
     void clean(){
+        this.topLevel=1;
+        this.GameRunning=false;
         this.observers=0;
         this.Players=new Player[4];
     }
@@ -57,15 +63,37 @@ public class GameAdmin {
         }
     }
 
-    public void startPlayers(){
+    public void sendAll(String s){
         for (int i=0;i<4;i++) {
             if (Players[i]!=null){
                 Sockets.sendSocket(
-                        JsonParser.WriteStart(),
+                        s,
                         Players[i].getPort(),
                         Players[i].getIp());
-                System.out.printf("[START] Player %s started\n",Players[i].getID());
+                System.out.printf("[SEND ALL] %s\n",s);
             }
         }
     }
+
+    public boolean newTop(int top){
+        if (top>this.topLevel){
+            this.topLevel=top;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean isReady(){
+        if (Players[0]==null && Players[1]==null){
+            return false;
+        }
+        return true;
+    }
+
+    public int getIDe(){
+        return LastEnemy++;
+    }
+
 }

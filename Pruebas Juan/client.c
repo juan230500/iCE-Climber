@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
 { 
 	int sock = 0, valread; 
 	struct sockaddr_in serv_addr; 
-	char hello[] = "{\"ID\":0, \"IP\":\"127.0.0.1\", \"Puerto\":8081}"; 
+	char hello[] = "{\"Evento\":\"top\",\"Nivel\":2,\"ID\":0, \"IP\":\"127.0.0.1\", \"Puerto\":8081}"; 
 	char buffer[1024] = {0}; 
 	for (int i=0;i<1;i++){
 		if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) 

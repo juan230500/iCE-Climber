@@ -26,6 +26,31 @@ public class EventListener extends Thread {
         Sockets.sendSocket(res,port,ip);
     }
 
+    void eventCase(String s) throws ParseException {
+        Object obj = new JSONParser().parse(s);
+        JSONObject jo = (JSONObject) obj;
+        String event=(String) jo.get("Evento");
+        if (event==null){
+            System.out.println("[EVENT] No se encontró el evento");
+            return;
+        }
+        switch (event){
+            case "move":
+                System.out.println("[EVENT MOVE]");
+                Admin.sendAll(s);
+                break;
+            case "top":
+                System.out.println("[EVENT TOP]");
+                int top=(int)(long) jo.get("Nivel");
+                if (Admin.newTop(top))
+                    Admin.sendAll(s);
+                break;
+            default:
+                System.out.println("[EVENT] No se identificó el evento");
+                break;
+        }
+    }
+
     public void run()
     {
         try
@@ -39,6 +64,9 @@ public class EventListener extends Thread {
                 if (!Admin.isGameRunning()){
                     System.out.println("[LOGIN] Intento de login");
                     login(s);
+                }
+                else{
+                    eventCase(s);
                 }
             }
 
