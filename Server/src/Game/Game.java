@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private int Njugadores;
     private List<PrintWriter> Observers;
-    private boolean inGame;
+    private List<PrintWriter> Players;
+    private volatile boolean inGame;
     private boolean Ready;
     private int LastEnemy;
 
@@ -28,17 +28,18 @@ public class Game {
         this.LastEnemy=0;
         this.Ready=false;
         this.Observers=new ArrayList<>();
-        this.Njugadores=0;
+        this.Players=new ArrayList<>();
         this.inGame=false;
     }
 
     int add(int ID, PrintWriter out){
         if (ID<2){
             Ready=true;
-            if (Njugadores>1)
+            if (Players.size()>1)
                 return -1;
             else
-                return Njugadores++;
+                Players.add(out);
+                return Players.size()-1;
         }
         else{
             if (Observers.size()>1)
@@ -50,9 +51,20 @@ public class Game {
         }
     }
 
-    void sendAll(String str){
+    void sendObservers(String str){
         for (PrintWriter PW:
              Observers) {
+            Sockets.writeSocket(str,PW);
+        }
+    }
+
+    void sendAll(String str){
+        for (PrintWriter PW:
+                Observers) {
+            Sockets.writeSocket(str,PW);
+        }
+        for (PrintWriter PW:
+                Players) {
             Sockets.writeSocket(str,PW);
         }
     }

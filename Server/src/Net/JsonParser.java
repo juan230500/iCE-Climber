@@ -29,7 +29,7 @@ public class JsonParser {
         jo.put("Evento", "enemy");
         jo.put("Nombre", name);
         jo.put("Nivel", level);
-        jo.put("Localizacion", location);
+        jo.put("PosX", location);
         jo.put("IDe", IDe);
         return jo.toString();
     }

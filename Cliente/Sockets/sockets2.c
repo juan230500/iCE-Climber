@@ -97,3 +97,126 @@ void sendMove(int ID,int PosX,int PosY){
     writeSocket(string);
 }
 
+void sendTop(int top){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "top");
+    cJSON_AddNumberToObject(monitor, "Nivel", top);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
+}
+void sendBlock(int nivel,int PosX,int ID){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddNumberToObject(monitor, "ID", ID);
+    cJSON_AddStringToObject(monitor, "Evento", "block");
+    cJSON_AddNumberToObject(monitor, "Nivel", nivel);
+    cJSON_AddNumberToObject(monitor, "PosX", PosX);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
+}
+
+void sendLife(int ID,int lives){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "life");
+    cJSON_AddNumberToObject(monitor, "ID", ID);
+    cJSON_AddNumberToObject(monitor, "Vidas", lives);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
+}
+
+void sendEnd(){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "end");
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
+}
+
+void sendDestroy(int ID,int IDe){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "destroy");
+    cJSON_AddNumberToObject(monitor, "ID", ID);
+    cJSON_AddNumberToObject(monitor, "IDe", IDe);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
+}
+
+void startAction(){
+    printf("START ACTION\n");
+}
+void moveAction(int ID,int PosX,int PosY){
+    printf("MOVE ACTION %d %d %d\n", ID, PosX, PosY);
+}
+void topAction(int nivel){
+    printf("TOP ACTION %d\n",nivel);
+}
+void blockAction(int nivel,int PosX,int ID){
+    printf("BLOCK ACTION %d %d %d\n",nivel,PosX,ID);
+}
+void enemyAction(int nivel,int PosX,int IDe,char* name){
+    printf("ENEMY ACTION %d %d %d %s\n",nivel,PosX,IDe,name);
+}
+void lifeAction(int ID,int lives){
+    printf("LIFE ACTION %d %d\n", ID, lives);
+}
+void destroyAction(int ID,int IDe){
+    printf("DESTROY ACTION %d %d\n", ID, IDe);
+}
+void endAction(){
+    printf("END ACTION\n");
+}
+
+
+void listenGeneralEvent(){
+    char* str=readSocket();
+    cJSON *monitor_json = cJSON_Parse(str);
+    const cJSON *eventJson = cJSON_GetObjectItemCaseSensitive(monitor_json, "Evento");
+    char* event=eventJson->valuestring;
+    //printf("$$$%s\n",event);
+    if (strcmp(event,"start")==0){
+        startAction();
+    }
+    else if (strcmp(event,"move")==0){
+        int ID=cJSON_GetObjectItemCaseSensitive(monitor_json, "ID")->valueint;
+        int PosX=cJSON_GetObjectItemCaseSensitive(monitor_json, "PosX")->valueint;
+        int PosY=cJSON_GetObjectItemCaseSensitive(monitor_json, "PosY")->valueint;
+        moveAction(ID,PosX,PosY);
+    }
+    else if (strcmp(event,"top")==0){
+        int nivel=cJSON_GetObjectItemCaseSensitive(monitor_json, "Nivel")->valueint;
+        topAction(nivel);
+    }
+    else if (strcmp(event,"block")==0){
+        int ID=cJSON_GetObjectItemCaseSensitive(monitor_json, "ID")->valueint;
+        int nivel=cJSON_GetObjectItemCaseSensitive(monitor_json, "Nivel")->valueint;
+        int PosX=cJSON_GetObjectItemCaseSensitive(monitor_json, "PosX")->valueint;
+        blockAction(nivel,PosX,ID);
+    }
+    else if (strcmp(event,"enemy")==0){
+        int nivel=cJSON_GetObjectItemCaseSensitive(monitor_json, "Nivel")->valueint;
+        int PosX=cJSON_GetObjectItemCaseSensitive(monitor_json, "PosX")->valueint;
+        int IDe=cJSON_GetObjectItemCaseSensitive(monitor_json, "IDe")->valueint;
+        char* name=cJSON_GetObjectItemCaseSensitive(monitor_json, "Nombre")->valuestring;
+        enemyAction(nivel,PosX,IDe,name);
+    }
+    else if (strcmp(event,"life")==0){
+        int ID=cJSON_GetObjectItemCaseSensitive(monitor_json, "ID")->valueint;
+        int lives=cJSON_GetObjectItemCaseSensitive(monitor_json, "Vidas")->valueint;
+        lifeAction(ID,lives);
+    }
+    else if (strcmp(event,"destroy")==0){
+        int ID=cJSON_GetObjectItemCaseSensitive(monitor_json, "ID")->valueint;
+        int IDe=cJSON_GetObjectItemCaseSensitive(monitor_json, "IDe")->valueint;
+        destroyAction(ID,IDe);
+    }
+    else if (strcmp(event,"end")==0){
+        endAction();
+    }
+    cJSON_Delete(monitor_json);
+}
+
+
+

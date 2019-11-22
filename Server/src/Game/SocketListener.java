@@ -14,7 +14,7 @@ public class SocketListener extends Thread{
     int ID;
     Game Admin;
 
-    SocketListener(PrintWriter out, BufferedReader in,Game Admin){
+    SocketListener(PrintWriter out, BufferedReader in,Game Admin,SocketAdmin parent){
         this.Admin=Admin;
         this.in=in;
         this.out=out;
@@ -49,9 +49,27 @@ public class SocketListener extends Thread{
             case "start":
                 System.out.println("[START]");
                 Admin.setInGame(true);
-                Admin.sendAll(str);
+                break;
+            case "move":
+                System.out.println("[MOVE]");
+                break;
+            case "top":
+                System.out.println("[TOP]");
+                break;
+            case "block":
+                System.out.println("[BLOCK]");
+                break;
+            case "life":
+                System.out.println("[LIFE]");
+                break;
+            case "destroy":
+                System.out.println("[DESTROY]");
+                break;
+            case "end":
+                System.out.println("[END]");
                 break;
         }
+        Admin.sendObservers(str);
     }
     public void run()
     {

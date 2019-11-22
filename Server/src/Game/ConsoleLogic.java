@@ -1,6 +1,7 @@
 package Game;
 
 import Net.JsonParser;
+import org.json.simple.JSONObject;
 
 import java.util.Scanner;
 
@@ -31,7 +32,14 @@ public class ConsoleLogic {
         int location=Integer.parseInt(words[3]);
         if (location<0 || location >100)
             return "Localización fuera de rango";
-        Admin.sendAll(JsonParser.WriteEnemy(words[1],level,location,Admin.getIDe()));
+
+        JSONObject jo = new JSONObject();
+        jo.put("Evento", "enemy");
+        jo.put("Nombre", words[1]);
+        jo.put("Nivel", level);
+        jo.put("PosX", location);
+        jo.put("IDe", Admin.getIDe());
+        Admin.sendAll(jo.toString());
         return "Generación exitosa";
     }
 
@@ -51,6 +59,8 @@ public class ConsoleLogic {
 
     public static void main(String[] args){
         Game G1=new Game();
+        SocketAdmin SA=new SocketAdmin(G1);
+        SA.start();
         ConsoleLogic Console1=new ConsoleLogic(G1);
         while (true){
             Scanner scan = new Scanner(System.in);

@@ -6,8 +6,8 @@ int main() {
     usleep(1000 * 10);
     int ID = sendLoginRequest(2);
     if (ID != -1) {
-        while (1){
-            readSocket();
+        for (int i=0;i<9;i++){
+            listenGeneralEvent();
         }
         //sendStart();
     }
