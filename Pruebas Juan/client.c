@@ -32,11 +32,13 @@ int main(int argc, char const *argv[])
 			printf("\nConnection Failed \n"); 
 			return -1; 
 		} 
+        for (int i = 0; i <5 ; i++){
 		send(sock , hello , strlen(hello) , 0 ); 
 		printf("Sent: \"%s\"\n",hello);
-		/*valread = read( sock , buffer, 1024); 
-		printf("%s %d\n",buffer,i ); */
+		valread = read( sock , buffer, 1024); 
+		printf("%s %d\n",buffer,i ); 
 		//usleep(1000*1000);
+        }
 	}
 	
 	return 0; 

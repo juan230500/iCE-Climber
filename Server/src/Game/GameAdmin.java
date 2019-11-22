@@ -70,7 +70,7 @@ public class GameAdmin {
                         s,
                         Players[i].getPort(),
                         Players[i].getIp());
-                System.out.printf("[SEND ALL] %s\n",s);
+                System.out.printf("[SEND ALL %d] %s\n",i,s);
             }
         }
     }
