@@ -6,23 +6,12 @@ import java.util.Scanner;
 
 public class ConsoleLogic {
 
-    private GameAdmin Admin;
+    private Game Admin;
 
-    ConsoleLogic(GameAdmin Admin){
+    ConsoleLogic(Game Admin){
         this.Admin=Admin;
     }
 
-    private String startCase(){
-        if (!this.Admin.isReady())
-            return "No hay suficientes jugadores";
-        this.Admin.setGameRunning(true);
-        Admin.sendAll(JsonParser.WriteStart());
-        return "Inicio exitoso";
-    }
-    private String endCase(){
-        this.Admin.setGameRunning(false);
-        return "Cierre exitoso";
-    }
     private String createCase(String[] words){
         if (words.length!=4)
             return "Cantidad de parámetros incorrecta";
@@ -49,21 +38,8 @@ public class ConsoleLogic {
     private String mainCase(String input){
         String[] words= input.split(" ");
         switch (words[0]) {
-            case "see":
-                this.Admin.showPlayers();
-                return "";
-            case "start":
-                if (this.Admin.isGameRunning())
-                    return "Ya hay otro juego corriendo";
-                else
-                    return startCase();
-            case "end":
-                if (this.Admin.isGameRunning())
-                    return endCase();
-                else
-                    return "No hay ningún juego que cerrar";
             case "create":
-                if (this.Admin.isGameRunning())
+                if (this.Admin.isInGame())
                     return createCase(words);
                 else
                     return "No hay ningún juego donde crear";
@@ -74,13 +50,8 @@ public class ConsoleLogic {
     }
 
     public static void main(String[] args){
-        GameAdmin Game1=new GameAdmin();
-        ConsoleLogic Console1=new ConsoleLogic(Game1);
-        EventListener EL1=new EventListener(Game1);
-        EL1.start();
-        Game1.add(8085,"127.0.0.1",1);
-        /*Game1.add(8085,"127.0.0.1",2);
-        Game1.add(8085,"127.0.0.1",2);*/
+        Game G1=new Game();
+        ConsoleLogic Console1=new ConsoleLogic(G1);
         while (true){
             Scanner scan = new Scanner(System.in);
             String input = scan.nextLine();

@@ -7,12 +7,8 @@
 #include <netinet/tcp.h>
 #include "../globals.h"
 #include <stdlib.h>
+#include "../Sockets/cJSON.h"
 
-void append(char* s, char c) {
-    int len = strlen(s);
-    s[len] = c;
-    s[len+1] = '\0';
-}
 
 int connectSocket(int PORT,char* IP)
 {
@@ -49,12 +45,55 @@ void writeSocket(char* string){
     char *newstr = malloc(strlen(string) + 2);
     strcpy(newstr, string);
     strcat(newstr, "\n");
-    printf("sent: %s",newstr);
+    printf("[CLIENT] \"%s\"\n",newstr);
     send(socketInt,newstr,strlen(newstr),0);
     free(newstr);
 }
 
 void closeSocket(){
     writeSocket("close");
+}
+
+char* readSocket(){
+    char* buffer = calloc(1024, sizeof(char));
+    read( socketInt , buffer, 1024);
+    printf("[SERVER] \"%s\"\n",buffer );
+    return buffer;
+}
+
+int sendLoginRequest(int ID){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddNumberToObject(monitor, "ID", ID);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+
+    writeSocket(string);
+
+    char* response=readSocket();
+
+    cJSON *monitor_json = cJSON_Parse(response);
+    const cJSON *val = cJSON_GetObjectItemCaseSensitive(monitor_json, "Respuesta");
+    //printf("%d\n",val->valueint);
+    return  val->valueint;
+}
+
+void sendStart(){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "start");
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+
+    writeSocket(string);
+}
+
+void sendMove(int ID,int PosX,int PosY){
+    cJSON *monitor = cJSON_CreateObject();
+    cJSON_AddStringToObject(monitor, "Evento", "move");
+    cJSON_AddNumberToObject(monitor, "ID", ID);
+    cJSON_AddNumberToObject(monitor, "PosX", PosX);
+    cJSON_AddNumberToObject(monitor, "PosY", PosY);
+    char* string = cJSON_PrintUnformatted(monitor);
+    cJSON_Delete(monitor);
+    writeSocket(string);
 }
 

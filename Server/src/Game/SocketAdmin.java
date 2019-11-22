@@ -1,23 +1,21 @@
-package Net;
+package Game;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class SocketAdmin {
 
-    public void addClient(){
+    public void addClient(Game Admin){
         ServerSocket ss;
         try {
             ss = new ServerSocket(8080);
             Socket s=ss.accept();//establishes connection
             BufferedReader din=new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter dout=new PrintWriter(s.getOutputStream());
-            SocketListener SL=new SocketListener(dout,din);
+            SocketListener SL=new SocketListener(dout,din,Admin);
             SL.start();
             ss.close();
             //ss.close();
@@ -27,9 +25,10 @@ public class SocketAdmin {
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
+        Game Admin=new Game();
         SocketAdmin SA=new SocketAdmin();
         while(true){
-            SA.addClient();
+            SA.addClient(Admin);
         }
     }
 }

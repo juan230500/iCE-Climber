@@ -1,5 +1,6 @@
 package Net;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,6 +44,22 @@ public class Sockets {
         return str;
     }
 
+    public static void writeSocket(String str,PrintWriter out){
+        out.println(str);
+        System.out.println("[SERVER] "+str);
+        out.flush();
+    }
+    public static String readSocket(BufferedReader in){
+        String str= null;
+        try {
+            str = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("[CLIENT] "+str);
+        return str;
+    }
+
     public static void main(String[] args){
         /*for (int i=0;i<10;i++) {
             sendSocket("Mensaje "+i, 8090, "127.0.0.1");
@@ -51,4 +68,6 @@ public class Sockets {
             sendSocket( "fsdf",80,"1");
         }
     }
+
+
 }

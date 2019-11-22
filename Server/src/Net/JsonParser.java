@@ -3,6 +3,7 @@ package Net;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -122,7 +123,13 @@ public class JsonParser {
     }
 
     public static void main(String[] args) throws Exception {
-        Object obj = new JSONParser().parse("{\"ID\":1, \"IP\":\"127.0.0.1\", \"Puerto\":8080}");
+        //Object obj = new JSONParser().parse("{\"ID\":1, \"IP\":\"127.0.0.1\", \"Puerto\":8080}");
+        Object obj = null;
+        try {
+            obj = new JSONParser().parse("}");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         /*WriteJsonTest();
         ParseJsonTest();*/
     }

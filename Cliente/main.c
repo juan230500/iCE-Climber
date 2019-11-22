@@ -3,10 +3,13 @@
 
 int main() {
     connectSocket(portServer,ipServer);
-    usleep(1000*1000*1);
-    writeSocket("hiiii");
-    writeSocket("Hiiii2");
-    writeSocket("Hiiii3");
+    usleep(1000*10);
+    int ID=sendLoginRequest(0);
+    if (ID!=-1){
+        sendStart();
+        usleep(1000*1000*2);
+        //sendStart();
+    }
     closeSocket();
     /*int val=sendLoginRequest(1,portClient,"127.0.0.1");
     printf("Response: %d",val);
