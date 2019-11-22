@@ -1,9 +1,13 @@
 #include <stdio.h>
-#include "Socket/sockets.c"
+#include "Sockets/submit.c"
 
 int main() {
-    printf("Hello, World!\n");
-    sendSocket("dsadsa123",8080,"localhost");
+    int val=sendLoginRequest(1,portClient,"127.0.0.1");
+    printf("Response: %d",val);
+    if (val){
+        listenSocket(portClient);
+    }
     //printf(listenSocket());
+    //sendSocket("b\tc",portServer,ipServer);
     return 0;
 }

@@ -78,9 +78,9 @@ public class ConsoleLogic {
         ConsoleLogic Console1=new ConsoleLogic(Game1);
         EventListener EL1=new EventListener(Game1);
         EL1.start();
-        Game1.add(8081,"127.0.0.1",1);
+        /*Game1.add(8081,"127.0.0.1",1);
         Game1.add(8081,"127.0.0.1",2);
-        Game1.add(8081,"127.0.0.1",2);
+        Game1.add(8081,"127.0.0.1",2);*/
         while (true){
             Scanner scan = new Scanner(System.in);
             String input = scan.nextLine();

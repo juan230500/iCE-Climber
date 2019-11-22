@@ -17,7 +17,10 @@ public class JsonParser {
     public static String WriteVal(boolean val){
         JSONObject jo = new JSONObject();
         jo.put("Evento", "login");
-        jo.put("Respuesta", val);
+        if (val)
+            jo.put("Respuesta", 1);
+        else
+            jo.put("Respuesta", 0);
         return jo.toString();
     }
     public static String WriteEnemy(String name,int level,int location,int IDe){

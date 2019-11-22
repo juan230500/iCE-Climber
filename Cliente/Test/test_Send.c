@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../Socket/sockets.c"
+#include "../Sockets/sockets.c"
 
 int main() {
     for (int i=0;i<10;i++){

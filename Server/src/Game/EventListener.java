@@ -6,16 +6,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.nio.file.AccessDeniedException;
 
 public class EventListener extends Thread {
-    GameAdmin Admin;
+    private GameAdmin Admin;
 
     EventListener(GameAdmin Admin){
         this.Admin= Admin;
     }
 
-    void login(String s) throws ParseException {
+    private void login(String s) throws ParseException {
         Object obj = new JSONParser().parse(s);
         JSONObject jo = (JSONObject) obj;
         int port=(int)(long) jo.get("Puerto");
@@ -26,7 +25,7 @@ public class EventListener extends Thread {
         Sockets.sendSocket(res,port,ip);
     }
 
-    void eventCase(String s) throws ParseException {
+    private void eventCase(String s) throws ParseException {
         Object obj = new JSONParser().parse(s);
         JSONObject jo = (JSONObject) obj;
         String event=(String) jo.get("Evento");
@@ -44,6 +43,18 @@ public class EventListener extends Thread {
                 int top=(int)(long) jo.get("Nivel");
                 if (Admin.newTop(top))
                     Admin.sendAll(s);
+                break;
+            case "life":
+                System.out.println("[EVENT LIFE]");
+                Admin.sendAll(s);
+                break;
+            case "destroy":
+                System.out.println("[EVENT DESTROY]");
+                Admin.sendAll(s);
+                break;
+            case "end":
+                System.out.println("[EVENT END]");
+                Admin.sendAll(s);
                 break;
             default:
                 System.out.println("[EVENT] No se identificó el evento");

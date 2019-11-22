@@ -1,4 +1,4 @@
-// Server side C/C++ program to demonstrate Socket programming 
+// Server side C/C++ program to demonstrate Sockets programming
 #include <unistd.h> 
 #include <stdio.h> 
 #include <sys/socket.h> 
@@ -17,7 +17,7 @@ char* listenSocket(int PORT)
 	struct sockaddr_in address; 
 	int opt = 1; 
 	int addrlen = sizeof(address); 
-	char buffer[2048] = {0};
+	char* buffer = calloc(2048, sizeof(char));
 	
 	// Creating socket file descriptor 
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) 
@@ -73,7 +73,7 @@ void sendSocket(char hello[],int PORT,char* IP)
     struct sockaddr_in serv_addr;
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        printf("\n Socket creation error \n");
+        printf("\n Sockets creation error \n");
         return;
     }
     serv_addr.sin_family = AF_INET;
