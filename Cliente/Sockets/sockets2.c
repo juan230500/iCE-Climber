@@ -9,7 +9,12 @@
 #include <stdlib.h>
 #include "../Sockets/cJSON.h"
 
-
+/**
+ * Metodo para establecer un canal de comunicacion con el server
+ * @param PORT puerto del server
+ * @param IP ipdel server
+ * @return estado de la operación
+ */
 int connectSocket(int PORT,char* IP)
 {
     int sock = 0, valread;
@@ -40,7 +45,10 @@ int connectSocket(int PORT,char* IP)
     socketInt=sock;
     return 0;
 }
-
+/**
+ * Envía una string a traves de un canal existente
+ * @param string
+ */
 void writeSocket(char* string){
     char *newstr = malloc(strlen(string) + 2);
     strcpy(newstr, string);
@@ -49,11 +57,17 @@ void writeSocket(char* string){
     send(socketInt,newstr,strlen(newstr),0);
     free(newstr);
 }
-
+/**
+ * Termina la conexión con una palabra clave
+ */
 void closeSocket(){
     writeSocket("close");
 }
 
+/**
+ * Lee una string entrante en un canal existente
+ * @return string entrante
+ */
 char* readSocket(){
     char* buffer = calloc(1024, sizeof(char));
     read( socketInt , buffer, 1024);
@@ -61,6 +75,11 @@ char* readSocket(){
     return buffer;
 }
 
+/**
+ * Envia una solicitud de registro y devuelve el ID indicado
+ * @param ID id asignado por el usuario
+ * @return id asignado por el servidor
+ */
 int sendLoginRequest(int ID){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddNumberToObject(monitor, "ID", ID);
@@ -77,6 +96,9 @@ int sendLoginRequest(int ID){
     return  val->valueint;
 }
 
+/**
+ * Envia un json para empezar el juego
+ */
 void sendStart(){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "start");
@@ -85,7 +107,12 @@ void sendStart(){
 
     writeSocket(string);
 }
-
+/**
+ * Envia un json para notificar un movimiento
+ * @param ID
+ * @param PosX
+ * @param PosY
+ */
 void sendMove(int ID,int PosX,int PosY){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "move");
@@ -96,7 +123,10 @@ void sendMove(int ID,int PosX,int PosY){
     cJSON_Delete(monitor);
     writeSocket(string);
 }
-
+/**
+ * Envia un json para notificar un cambio de nivel
+ * @param top
+ */
 void sendTop(int top){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "top");
@@ -105,6 +135,12 @@ void sendTop(int top){
     cJSON_Delete(monitor);
     writeSocket(string);
 }
+/**
+ * Envia un json para notificar un bloque roto
+ * @param nivel
+ * @param PosX
+ * @param ID jugador
+ */
 void sendBlock(int nivel,int PosX,int ID){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddNumberToObject(monitor, "ID", ID);
@@ -115,7 +151,11 @@ void sendBlock(int nivel,int PosX,int ID){
     cJSON_Delete(monitor);
     writeSocket(string);
 }
-
+/**
+ * Envia un json para notificar un cambio de vida
+ * @param ID jugador
+ * @param lives vidas
+ */
 void sendLife(int ID,int lives){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "life");
@@ -125,7 +165,9 @@ void sendLife(int ID,int lives){
     cJSON_Delete(monitor);
     writeSocket(string);
 }
-
+/**
+ * Envia un json para notificar final de la partida
+ */
 void sendEnd(){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "end");
@@ -133,7 +175,11 @@ void sendEnd(){
     cJSON_Delete(monitor);
     writeSocket(string);
 }
-
+/**
+ * ENvia un json para notificar destrucción de obstáculo
+ * @param ID
+ * @param IDe
+ */
 void sendDestroy(int ID,int IDe){
     cJSON *monitor = cJSON_CreateObject();
     cJSON_AddStringToObject(monitor, "Evento", "destroy");
@@ -169,7 +215,9 @@ void endAction(){
     printf("END ACTION\n");
 }
 
-
+/**
+ * Escucha por algún evento del servidor, lo clasifica y parsea los datos dados
+ */
 void listenGeneralEvent(){
     char* str=readSocket();
     cJSON *monitor_json = cJSON_Parse(str);
