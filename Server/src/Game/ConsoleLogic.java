@@ -1,18 +1,20 @@
 package Game;
 
-import Net.JsonParser;
 import org.json.simple.JSONObject;
-
-import java.util.Scanner;
 
 public class ConsoleLogic {
 
     private Game Admin;
 
-    ConsoleLogic(Game Admin){
+    public ConsoleLogic(Game Admin){
         this.Admin=Admin;
     }
 
+    /**
+     * Verifica y ejecuta un comando create
+     * @param words lista de parámetros introducidos
+     * @return repuesta de error o éxito
+     */
     private String createCase(String[] words){
         if (words.length!=4)
             return "Cantidad de parámetros incorrecta";
@@ -43,7 +45,12 @@ public class ConsoleLogic {
         return "Generación exitosa";
     }
 
-    private String mainCase(String input){
+    /**
+     * Identifica los casos de comandos
+     * @param input string del usuario
+     * @return respuesta del comando
+     */
+    public String mainCase(String input){
         String[] words= input.split(" ");
         switch (words[0]) {
             case "create":
@@ -57,18 +64,9 @@ public class ConsoleLogic {
 
     }
 
-    public static void main(String[] args){
-        Game G1=new Game();
-        SocketAdmin SA=new SocketAdmin(G1);
-        SA.start();
-        ConsoleLogic Console1=new ConsoleLogic(G1);
-        while (true){
-            Scanner scan = new Scanner(System.in);
-            String input = scan.nextLine();
-            if (input.equals("exit")) return;
-            System.out.printf("[CONSOLE] %s\n",Console1.mainCase(input));
-        }
-
-    }
+    /**
+     *
+     * @param args
+     */
 
 }

@@ -1,28 +1,21 @@
-import java.io.*;
-import java.net.Socket;
+import Game.Game;
+import Game.SocketAdmin;
+import Game.ConsoleLogic;
+import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
 
 public class Main extends Thread {
-    public static void main(String[] args)   {
-        String str="";
-        try{
-            Socket s=new Socket("127.0.0.1",8080);
-            BufferedReader din=new BufferedReader(new InputStreamReader(s.getInputStream()));
-            PrintWriter dout=new PrintWriter(s.getOutputStream());
-            for (int i = 0; i <5 ; i++) {
-                dout.println("Repeate pls");
-                dout.flush();
-                str=din.readLine();
-                System.out.println("Server: "+str);
-                sleep(500);
-            }
-            din.close();
-            dout.close();
-            s.close();
-
-        }catch(Exception e){System.out.println(e);}
-
+    public static void main(String[] args){
+        Game G1=new Game();
+        SocketAdmin SA=new SocketAdmin(G1);
+        SA.start();
+        ConsoleLogic Console1=new ConsoleLogic(G1);
+        while (true){
+            Scanner scan = new Scanner(System.in);
+            String input = scan.nextLine();
+            if (input.equals("exit")) return;
+            System.out.printf("[CONSOLE] %s\n",Console1.mainCase(input));
+        }
 
     }
 }

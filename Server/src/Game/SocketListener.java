@@ -9,18 +9,23 @@ import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class SocketListener extends Thread{
-    PrintWriter out;
-    BufferedReader in;
-    int ID;
-    Game Admin;
+    private PrintWriter out;
+    private BufferedReader in;
+    private int ID;
+    private Game Admin;
 
-    SocketListener(PrintWriter out, BufferedReader in,Game Admin,SocketAdmin parent){
+    SocketListener(PrintWriter out, BufferedReader in,Game Admin){
         this.Admin=Admin;
         this.in=in;
         this.out=out;
         this.ID=-1;
     }
-    void logIn(String str){
+
+    /**
+     * Procesa una string para logIn de un nuevo usuario y le responde a la solicitud
+     * @param str input de los jugadores
+     */
+    private void logIn(String str){
         Object obj = null;
         try {
             obj = new JSONParser().parse(str);
@@ -35,7 +40,13 @@ public class SocketListener extends Thread{
         String res=jop.toString();
         Sockets.writeSocket(res,out);
     }
-    void generalEvent(String str){
+
+    /**
+     * Clasifica los eventos que envían los jugadores a lo largo de partida
+     * En muchos casos solo notifica a los observadores
+     * @param str input de los jugadores
+     */
+    private void generalEvent(String str){
         Object obj = null;
         try {
             obj = new JSONParser().parse(str);
@@ -71,6 +82,10 @@ public class SocketListener extends Thread{
         }
         Admin.sendObservers(str);
     }
+
+    /**
+     * Hilo para escuchar a un jugador en específico
+     */
     public void run()
     {
         try
@@ -78,7 +93,7 @@ public class SocketListener extends Thread{
             System.out.println ("Thread " +
                     Thread.currentThread().getId() +
                     " is running");
-            String str="";
+            String str;
             while(true){
                 str=Sockets.readSocket(in);
                 if (str==null || str.equals("close")){

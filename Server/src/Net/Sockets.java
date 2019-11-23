@@ -1,54 +1,26 @@
 package Net;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class Sockets {
     /**
-     * Autor: Juan
-     * Método genérico para enviar una string desde un socket
+     * Metodo para enviar una string a traves de un canal existente
+     * @param str string a enviar
+     * @param out canal
      */
-    public static void sendSocket(String hello, int PORT, String IP) {
-        try{
-            Socket s=new Socket(IP,PORT);
-            PrintWriter dout=new PrintWriter(s.getOutputStream());
-            dout.print(hello);
-            System.out.println("[JAVA CLIENT] "+hello);
-            dout.flush();
-            dout.close();
-            s.close();
-        }catch(Exception e){System.out.println(e);}
-    }
-
-    /**
-     * Autor: Juan
-     * Método genérico para esperar una string en un socket
-     */
-    public static String listenSocket(int PORT){
-        ServerSocket ss;
-        String str="";
-        try {
-            ss = new ServerSocket(PORT);
-            Socket s=ss.accept();//establishes connection
-            DataInputStream dis=new DataInputStream(s.getInputStream());
-            str=dis.readLine();
-            System.out.println("[JAVA SERVER] "+str);
-            ss.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return str;
-    }
-
     public static void writeSocket(String str,PrintWriter out){
         out.println(str);
         System.out.println("[SERVER] "+str);
         out.flush();
     }
+
+    /**
+     * Metodo para leer una string entrante a un canal existente
+     * @param in canal
+     * @return string leida
+     */
     public static String readSocket(BufferedReader in){
         String str= null;
         try {
@@ -60,14 +32,6 @@ public class Sockets {
         return str;
     }
 
-    public static void main(String[] args){
-        /*for (int i=0;i<10;i++) {
-            sendSocket("Mensaje "+i, 8090, "127.0.0.1");
-        }*/
-        for (int i=0;i<1;i++) {
-            sendSocket( "fsdf",80,"1");
-        }
-    }
 
 
 }

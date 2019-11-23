@@ -1,28 +1,31 @@
 package Game;
 
-import Net.Sockets;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static java.lang.Thread.sleep;
 
 public class SocketAdmin extends Thread {
-    Game Admin;
+    private Game Admin;
 
     public SocketAdmin(Game admin) {
         Admin = admin;
     }
 
-    public void addClient(Game Admin){
+    /**
+     * Acepta cualquier socket y pasa el canal de comunicación
+     * a un hiloque se encargará de comunicarse con ese jugador
+     * @param Admin administrador de juego actual
+     */
+    private void addClient(Game Admin){
         ServerSocket ss;
         try {
             ss = new ServerSocket(8080);
             Socket s=ss.accept();//establishes connection
             BufferedReader din=new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter dout=new PrintWriter(s.getOutputStream());
-            SocketListener SL=new SocketListener(dout,din,Admin,this);
+            SocketListener SL=new SocketListener(dout,din,Admin);
             SL.start();
             ss.close();
             //ss.close();
@@ -31,6 +34,9 @@ public class SocketAdmin extends Thread {
         }
     }
 
+    /**
+     * Hilo para escuchar registros de nuevos usuarios
+     */
     public void run()
     {
         try
